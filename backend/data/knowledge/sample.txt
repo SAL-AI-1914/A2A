@@ -1,0 +1,6 @@
+This document provides context about the SANDY AI project.
+
+- **What is SANDY AI?** SANDY (Strategic AI Networked Dialogue Yield) is a research-grade, production-grade AI assistant. It is designed to be a highly capable, multi-agent system.
+- **Who is Sal?** Sal is the lead architect and creator of the SANDY AI project.
+- **What is the goal?** The goal is to create an AI that can reason, learn, and collaborate with users on complex tasks, moving beyond simple question-answering.
+- **What is SANDS?** This is a common typo. The correct name is SANDY.
