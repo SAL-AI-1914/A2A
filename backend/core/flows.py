@@ -69,3 +69,30 @@ def sandy_orchestrator(user_query: str) -> str:
     )
 
     return response.text()
+
+# This is the streaming version of the main orchestrator flow
+@flow(name="sandyOrchestratorStream")
+async def sandy_orchestrator_stream(user_query: str):
+    """
+    A streaming version of the main flow that yields response chunks.
+    """
+    prompt = f"""
+    You are SANDY, an advanced AI assistant. Your creator is named Sal.
+    Your personality is helpful, knowledgeable, and slightly formal.
+    Always answer the user's query based on the provided context.
+    If the context does not contain the answer, state that you do not have enough information.
+    Do not make up answers.
+
+    Query: {user_query}
+    """
+
+    # Use the `stream` method to get a stream of response chunks.
+    stream = main_model.stream(
+        prompt,
+        retrievers=[sandy_knowledge_retriever],
+        tools=[readFile]
+    )
+
+    # Yield each chunk of the response as it comes in.
+    async for chunk in stream:
+        yield chunk.text

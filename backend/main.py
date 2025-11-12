@@ -1,6 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from pydantic import BaseModel
-from genkit import run
+from genkit import stream, run
 from core import flows
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -50,3 +50,26 @@ async def chat(request: ChatRequest):
 @app.get("/")
 def read_root():
     return {"message": "SANDY AI Backend is running."}
+
+# WebSocket endpoint for streaming chat
+@app.websocket("/api/chat/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    try:
+        while True:
+            # Wait for a message from the client
+            message = await websocket.receive_text()
+            print(f"Received message via WebSocket: {message}")
+
+            # Start streaming the response from the Genkit flow
+            response_stream = stream(flows.sandy_orchestrator_stream, message)
+
+            # Send each chunk of the response to the client
+            for chunk in response_stream:
+                await websocket.send_text(chunk)
+
+    except WebSocketDisconnect:
+        print("Client disconnected from WebSocket.")
+    except Exception as e:
+        print(f"An error occurred in the WebSocket: {e}")
+        await websocket.close(code=1011)
