@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+python-dotenv
+google-ai-generativelanguage
+google-generativeai
+genkit
+chromadb
+langchain-text-splitters
+pydantic
